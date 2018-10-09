@@ -23,16 +23,44 @@ public class Rover {
 		}
 	}
 
+	/*
+	 * Подбираю комбинацию действий, результатом которых будет нужная позиция.
+	 * Комбинации проверяются от короткой к длинной, а значит - первая найденная -
+	 * самая короткая
+	 */
 	private int goToPos(int pos) {
+		if (pos == position) {
+			return 0;
+		}
+		int st1;
+		int st0;
 		int i = 0;
+		// Поиск среди комбинация, начинающихся с единицы (действие "A")
 		while (true) {
-			if (getPosByCode(i) == pos) {
-				return Integer.toBinaryString(i).length();
+			if (getPosByCode1(i, pos) == pos) {
+				st1 = Integer.toBinaryString(i).length();
+				break;
 			}
 			i++;
-			speed = 1;
-			position = 0;
+			resetFields();
 		}
+
+		resetFields();
+		i = 0;
+		// Поиск среди комбинация, начинающихся с нуля (действие "R")
+		while (true) {
+			if (getPosByCode0(i, pos) == pos) {
+				st0 = Integer.toBinaryString(i).length() + 1;
+				break;
+			}
+			i++;
+			resetFields();
+		}
+		// Сравниваю результаты двух поисков и возвращаю более короткий
+		if (st1 <= st0)
+			return st1;
+		else
+			return st0;
 	}
 
 	private void acceleration() {
@@ -44,13 +72,33 @@ public class Rover {
 		speed = (speed > 0) ? -1 : 1;
 	}
 
-	private int getPosByCode(int code) {
-		for (char c : Integer.toBinaryString(code).toCharArray()) {
+	/*
+	 * Так как число в двоичной системе не может начинаться с нуля, добавил два
+	 * метода, вычисляющих позицию по коду: в первом код начинается с единицы(A), во
+	 * втором - с нуля(R)
+	 */
+	private int getPosByCode1(int code, int pos) {
+		for (char c : (Integer.toBinaryString(code)).toCharArray()) {
 			if (c == '1')
 				acceleration();
 			else if (c == '0')
 				reverse();
 		}
 		return position;
+	}
+
+	private int getPosByCode0(int code, int pos) {
+		for (char c : (0 + Integer.toBinaryString(code)).toCharArray()) {
+			if (c == '1')
+				acceleration();
+			else if (c == '0')
+				reverse();
+		}
+		return position;
+	}
+
+	private void resetFields() {
+		speed = 1;
+		position = 0;
 	}
 }
