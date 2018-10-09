@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Rover</title>
+   </head>
+   <body>
+      <style>
+         #rover{
+         width: 6.66vw;
+         height: 72px;
+         position: absolute;
+         background-image: url("img/rover.jpg");
+         background-repeat: no-repeat;
+         background-size: 100% 100%, auto;
+         }
+         #line{
+         width: 99vw;
+         height: 26px;
+         position: absolute;
+         background-image: url("img/line.jpg");
+         background-repeat: no-repeat;
+         background-size: 100% 100%, auto;
+         }
+      </style>
+      <button onclick="acceleration()" style="width:50px;height:50px">A</button>
+      <button onclick="reverse()" style="width:50px;height:50px">R</button>
+      <div id="rover" style="position:absolute; left:46.67vw"></div>
+      <div id="line" style="position:absolute; top:135px"></div>
+      <input id="speed" type="text" size="4" value ="1" style="position:absolute; left:200px" />
+      <label for="speed" style="position:absolute; left:140px">Speed</label>
+      <input id="position" type="text" size="4" value = "0" style="position:absolute; left:200px; top:40px" />
+      <label for="position" style="position:absolute; left:140px; top:40px">Position</label>
+      <div id="pos1" style="position:absolute; left:3.33vw; top:160px">-7</div>
+      <div id="pos2" style="position:absolute; left:8.99vw; top:160px">-6</div>
+      <div id="pos3" style="position:absolute; left:15.66vw; top:160px">-5</div>
+      <div id="pos4" style="position:absolute; left:22.31vw; top:160px">-4</div>
+      <div id="pos5" style="position:absolute; left:28.97vw; top:160px">-3</div>
+      <div id="pos6" style="position:absolute; left:35.63vw; top:160px">-2</div>
+      <div id="pos7" style="position:absolute; left:42.29vw; top:160px">-1</div>
+      <div id="pos8" style="position:absolute; left:48.95vw; top:160px">0</div>
+      <div id="pos9" style="position:absolute; left:55.61vw; top:160px">1</div>
+      <div id="pos10" style="position:absolute; left:62.27vw; top:160px">2</div>
+      <div id="pos11" style="position:absolute; left:68.93vw; top:160px">3</div>
+      <div id="pos12" style="position:absolute; left:75.59vw; top:160px">4</div>
+      <div id="pos13" style="position:absolute; left:82.25vw; top:160px">5</div>
+      <div id="pos14" style="position:absolute; left:88.91vw; top:160px">6</div>
+      <div id="pos15" style="position:absolute; left:95.57vw; top:160px">7</div>     
+      <script>
+         var pos = 46.62;
+         var speed = 1;
+         var position = 0;
+         var maxPosition = 7;
+         var minPosition = -7;
+         
+         function acceleration(){
+         	var rover = document.getElementById("rover");
+         	pos += 6.67*speed;
+         	if (pos < 0) {
+         		pos = 0;
+         	}
+         	if (pos > 93.33) {
+         		pos = 93.33;
+         	}
+         	rover.style.left = pos + 'vw';
+         	position += speed;
+         	speed *= 2;
+         	document.getElementById('speed').value = speed;
+         	document.getElementById('position').value = position;
+         	checkMinMaxPositions();
+         	renamePositions();
+         }
+         
+         function reverse(){
+         	if (speed > 0)speed = -1;
+         	else speed = 1;
+         	document.getElementById('speed').value = speed;
+         }
+         
+         function checkMinMaxPositions(){
+         	if(position > maxPosition){
+         		maxPosition = position;
+         		minPosition = maxPosition - 14;
+         	}
+         	if (position < minPosition) {
+         		minPosition = position;
+         		maxPosition = minPosition + 14;
+         	}
+         }
+         
+         function renamePositions(){
+         	var x = minPosition;
+         	for(i = 1; i < 16; i++){
+         		document.getElementById('pos' + i).innerHTML = x;
+         		x++;
+         	}
+         }
+         
+      </script>
+   </body>
+</html>
